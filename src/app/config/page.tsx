@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
 
+
 interface Step {
   name: string;
   command: string;
@@ -300,7 +301,6 @@ export default function Developer() {
                   </label>
                 </section>
               ))}
-
               <section className="flex flex-col mt-5">
                 <section className="flex flex-row justify-between items-center">
                   <h2 className="text-2xl font-bold">Env Config</h2>
