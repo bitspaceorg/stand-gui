@@ -30,7 +30,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     <main className="flex min-h-screen w-full flex-col items-center justify-center font-helvetica">
       <h1 className="text-4xl font-bold">Welcome!</h1>
       <p className="text-xl">
-        Let&apos;s <span className="text-blue-500">STAND</span> together
+        Let&apos;s <span className="font-bold">STAND</span> together
       </p>
       <form
         className="flex flex-col items-center justify-around w-1/4"
@@ -52,10 +52,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           placeholder="Password"
           required
         />
-        <button className="bg-blue-500 text-white p-2 m-2 w-full" type="submit">
+        <button className="bg-black text-white p-2 m-2 w-full" type="submit">
           Login
         </button>
-        <p className="text-blue-300" onClick={handleClick}>
+        <p className="text-gray-500" onClick={handleClick}>
           Forget Password?
         </p>
         {showMsg && <p className="text-red-500 text-sm">{msg}</p>}
