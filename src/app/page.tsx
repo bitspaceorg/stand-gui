@@ -9,7 +9,7 @@ export default function Home() {
 
   useEffect(() => {
     const username = localStorage.getItem("username");
-    if (username) {
+    if (!username) {
       setIsLoggedIn(true);
     }
   }, []);
