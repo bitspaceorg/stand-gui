@@ -39,8 +39,8 @@ export default function Home() {
             <li>CPU Count: {metrics.cpuCount}</li>
             <li>OS: {metrics.os}</li>
             <li>
-              Memory: {metrics.memory.totalMemory} total,{" "}
-              {metrics.memory.usedMemory} used
+              Memory: {metrics.memory.totalMemory} GB total,{" "}
+              {metrics.memory.usedMemory} GB used
             </li>
             <li>
               Disk: {metrics.disk.totalDisk} GB total, {metrics.disk.usedDisk}{" "}
