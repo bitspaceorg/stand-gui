@@ -16,13 +16,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     const password = (e.target as HTMLFormElement).password.value;
 
     try {
-      const response = await axios.post("http://localhost:6789/verifyUser", {
-        params: {
-          username,
-          password,
-        },
-      });
-
+      const response = await axios.post(
+        `http://localhost:6789/verifyUser?username=${username}&password=${password}`,
+      );
       if (response.data.status) {
         localStorage.setItem("username", username);
         onLogin();
