@@ -13,4 +13,5 @@ export interface Metrics {
   };
   upTime: string;
   maxProcs: number;
+  network: any;
 }
