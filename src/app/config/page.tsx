@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import axios from "axios";
-
+import { baseURL } from "@/libs/consts";
 
 interface Step {
   name: string;
@@ -13,6 +13,10 @@ interface Step {
 interface Env {
   name: string;
   value: string;
+}
+
+interface RepoResponse {
+  repos: string[];
 }
 
 export default function Developer() {
@@ -25,6 +29,26 @@ export default function Developer() {
   const [requirementVersion, setRequirementVersion] = useState("18");
   const [runName, setRunName] = useState("");
   const [runCMD, setRunCMD] = useState("");
+  const [repos, setRepos] = useState<string[]>([]);
+  const [selectedRepo, setSelectedRepo] = useState("");
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        const response = await axios.get<RepoResponse>(
+          "http://localhost:6789/repos",
+        );
+        setRepos(response.data.repos);
+        if (response.data.repos.length > 0) {
+          setSelectedRepo(response.data.repos[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching repositories:", error);
+      }
+    };
+
+    fetchRepos();
+  }, []);
 
   const addStep = () => {
     setSteps([...steps, { name: "", command: "" }]);
@@ -58,6 +82,7 @@ export default function Developer() {
         name: projectName,
         home: projectHome,
         log: projectLog,
+        repo: selectedRepo,
       },
       requirements: {
         language: requirementLanguage,
@@ -81,7 +106,7 @@ export default function Developer() {
     console.log(JSON.stringify(data));
     console.log(data);
     try {
-      const response = await axios.post("/api/submit", data, {
+      const response = await axios.post(`${baseURL}/newProject`, data, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -117,6 +142,27 @@ export default function Developer() {
             <section className="flex flex-col w-1/2 p-5">
               <section className="flex flex-col mt-5">
                 <h2 className="text-2xl font-bold">Project Config</h2>
+                <label
+                  htmlFor="selectedRepo"
+                  className="block mt-5 text-gray-900 dark:text-white"
+                >
+                  Select Repository
+                  <select
+                    id="selectedRepo"
+                    className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    value={selectedRepo}
+                    onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                      setSelectedRepo(e.target.value)
+                    }
+                    required
+                  >
+                    {repos.map((repo) => (
+                      <option key={repo} value={repo}>
+                        {repo}
+                      </option>
+                    ))}
+                  </select>
+                </label>
                 <label
                   htmlFor="projectName"
                   className="block mt-5 text-gray-900 dark:text-white"
@@ -225,7 +271,7 @@ export default function Developer() {
                     type="text"
                     id="runName"
                     className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="My Project"
+                    placeholder="this is running"
                     value={runName}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       setRunName(e.target.value)
@@ -242,7 +288,7 @@ export default function Developer() {
                     type="text"
                     id="runCMD"
                     className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="/tmp/test/"
+                    placeholder="run this"
                     value={runCMD}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       setRunCMD(e.target.value)
@@ -291,7 +337,7 @@ export default function Developer() {
                       type="text"
                       id={`stepCommand-${index}`}
                       className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="run this"
+                      placeholder="build this"
                       value={step.command}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         handleStepChange(index, "command", e.target.value)
