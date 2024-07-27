@@ -28,12 +28,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center font-helvetica">
-      <h1 className="text-4xl font-bold">Welcome!</h1>
-      <p className="text-xl">
+      <h1 className="text-4xl">
         Let&apos;s <span className="font-bold">STAND</span> together
-      </p>
+      </h1>
       <form
-        className="flex flex-col items-center justify-around w-1/4"
+        className="flex flex-col items-center justify-around w-1/4 mt-16"
         onSubmit={handleSubmit}
       >
         <input
