@@ -30,7 +30,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     <main className="flex min-h-screen w-full flex-col items-center justify-center font-helvetica">
       <h1 className="text-4xl font-bold">Welcome!</h1>
       <p className="text-xl">
-        Let's <span className="text-blue-500">STAND</span> together
+        Let&apos;s <span className="text-blue-500">STAND</span> together
       </p>
       <form
         className="flex flex-col items-center justify-around w-1/4"
