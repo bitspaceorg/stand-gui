@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { Metrics } from "@/libs/types";
-import { localURL, port } from "@/libs/consts";
+import { baseURL } from "@/libs/consts";
 export default function Home() {
   const [metrics, setMetrics] = useState<Metrics | null>(null);
 
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        console.log("localURL", localURL);
-        console.log("port", port);
-        const response = await axios.get(`${localURL}:${port}/metric`);
+        console.log("baseURL", baseURL);
+        const response = await axios.get(`${baseURL}/metric`);
         setMetrics(response.data);
       } catch (error) {
         console.error("Error fetching metrics:", error);

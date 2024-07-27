@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React, { useState, ChangeEvent } from "react";
+import axios from "axios";
 
 interface Step {
   name: string;
@@ -16,6 +17,13 @@ interface Env {
 export default function Developer() {
   const [steps, setSteps] = useState<Step[]>([{ name: "", command: "" }]);
   const [envs, setEnvs] = useState<Env[]>([{ name: "", value: "" }]);
+  const [projectName, setProjectName] = useState("");
+  const [projectHome, setProjectHome] = useState("");
+  const [projectLog, setProjectLog] = useState("");
+  const [requirementLanguage, setRequirementLanguage] = useState("node");
+  const [requirementVersion, setRequirementVersion] = useState("18");
+  const [runName, setRunName] = useState("");
+  const [runCMD, setRunCMD] = useState("");
 
   const addStep = () => {
     setSteps([...steps, { name: "", command: "" }]);
@@ -41,6 +49,53 @@ export default function Developer() {
     setEnvs(newEnvs);
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const data = {
+      project: {
+        name: projectName,
+        home: projectHome,
+        log: projectLog,
+      },
+      requirements: {
+        language: requirementLanguage,
+        version: requirementVersion,
+      },
+      build: steps.map((step) => ({
+        name: step.name,
+        cmd: step.command,
+      })),
+      run: [
+        {
+          name: runName,
+          cmd: runCMD,
+        },
+      ],
+      env: envs.map((env) => ({
+        name: env.name,
+        value: env.value,
+      })),
+    };
+    console.log(JSON.stringify(data));
+    console.log(data);
+    try {
+      const response = await axios.post("/api/submit", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      console.log("Data submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    }
+  };
+
   return (
     <main className="flex flex-col font-helvetica min-h-screen w-full">
       <section className="w-full h-1/2 p-2">
@@ -52,7 +107,10 @@ export default function Developer() {
         </Link>
       </section>
       <section className="w-full mt-5">
-        <form className="flex flex-col min-h-screen items-center p-10">
+        <form
+          className="flex flex-col min-h-screen p-10 items-center"
+          onSubmit={handleSubmit}
+        >
           <h1 className="text-4xl font-bold">Configure ⚙️</h1>
           <section className="flex flex-row w-full justify-between">
             <section className="flex flex-col w-1/2 p-5">
@@ -68,6 +126,10 @@ export default function Developer() {
                     id="projectName"
                     className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="My Project"
+                    value={projectName}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setProjectName(e.target.value)
+                    }
                     required
                   />
                 </label>
@@ -81,6 +143,10 @@ export default function Developer() {
                     id="projectHome"
                     className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="/tmp/test/"
+                    value={projectHome}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setProjectHome(e.target.value)
+                    }
                     required
                   />
                 </label>
@@ -94,6 +160,10 @@ export default function Developer() {
                     id="projectLog"
                     className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="/tmp/testLog/"
+                    value={projectLog}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setProjectLog(e.target.value)
+                    }
                     required
                   />
                 </label>
@@ -105,28 +175,36 @@ export default function Developer() {
                     htmlFor="requirements"
                     className="block mt-5 text-gray-900 dark:text-white"
                   >
-                    Requirement Name
+                    Requirement Language
                     <select
                       name="requirements"
                       id="requirements"
-                      aria-label="Requirement Name"
+                      aria-label="Requirement Language"
                       className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      value={requirementLanguage}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                        setRequirementLanguage(e.target.value)
+                      }
                     >
                       <option value="node">node</option>
-                      <option value="python"> python</option>
+                      <option value="python">python</option>
                       <option value="python3">python3</option>
                     </select>
                   </label>
                   <label
-                    htmlFor="requirements"
+                    htmlFor="requirementVersion"
                     className="block mt-5 text-gray-900 dark:text-white"
                   >
                     Requirement Version
                     <select
-                      name="requirements"
-                      id="requirements"
+                      name="requirementVersion"
+                      id="requirementVersion"
                       aria-label="Requirement Version"
                       className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      value={requirementVersion}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                        setRequirementVersion(e.target.value)
+                      }
                     >
                       <option value="18">18</option>
                       <option value="19">19</option>
@@ -147,6 +225,10 @@ export default function Developer() {
                     id="runName"
                     className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="My Project"
+                    value={runName}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setRunName(e.target.value)
+                    }
                     required
                   />
                 </label>
@@ -160,6 +242,10 @@ export default function Developer() {
                     id="runCMD"
                     className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="/tmp/test/"
+                    value={runCMD}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setRunCMD(e.target.value)
+                    }
                     required
                   />
                 </label>
@@ -214,13 +300,14 @@ export default function Developer() {
                   </label>
                 </section>
               ))}
+
               <section className="flex flex-col mt-5">
                 <section className="flex flex-row justify-between items-center">
-                  <h2 className="text-2xl font-bold">Environment Variables</h2>
+                  <h2 className="text-2xl font-bold">Env Config</h2>
                   <button
                     type="button"
                     onClick={addEnv}
-                    className="bg-black text-white rounded p-2 w-1/4"
+                    className="bg-black text-white rounded p-2 w-1/4 mb-5"
                   >
                     Add Env
                   </button>
@@ -236,7 +323,7 @@ export default function Developer() {
                         type="text"
                         id={`envName-${index}`}
                         className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ENV_VAR_NAME"
+                        placeholder="ENV_NAME"
                         value={env.name}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                           handleEnvChange(index, "name", e.target.value)
@@ -253,7 +340,7 @@ export default function Developer() {
                         type="text"
                         id={`envValue-${index}`}
                         className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="value"
+                        placeholder="3000"
                         value={env.value}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                           handleEnvChange(index, "value", e.target.value)
@@ -268,9 +355,8 @@ export default function Developer() {
           </section>
           <button
             type="submit"
-            className="bg-black rounded text-white p-2 m-2 w-1/4"
+            className="bg-black text-white rounded p-2 w-1/4  mt-5"
           >
-            {" "}
             Submit
           </button>
         </form>

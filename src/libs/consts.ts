@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-export const localURL = "http://localhost";
-export const port = process.env.HTTP_PORT || 3000;
+const localURL = "http://localhost";
+const port = 6789;
+export const baseURL = `${localURL}:${port}`;
