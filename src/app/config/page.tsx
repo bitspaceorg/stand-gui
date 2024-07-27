@@ -52,30 +52,47 @@ export default function Developer() {
               <input
                 type="text"
                 id="projectLog"
-                className="bg-gray-50 border border-gray-300 text-gray-900  rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="mt-1 bg-gray-50 border border-gray-300 text-gray-900  rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="/tmp/testLog/"
                 required
               />
             </label>
           </section>
           <section className="flex flex-col mt-5">
-            <h2 className="text-2xl font-bold">Requirements Config</h2>
-            <label
-              htmlFor="requirements"
-              className="block mt-5 text-gray-900 dark:text-white"
-            >
-              <select
-                name="requirements"
-                id="requirements"
-                aria-label="Requirement Name"
-                className="bg-gray-50 border border-gray-300 text-gray-900  rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            <section className="flex flex-row justify-between">
+              <h2 className="text-2xl font-bold">Requirements Config</h2>
+              <button className="bg-blue-500 text-white p-2 m-2 w-1/4">
+                Add Requirement
+              </button>
+            </section>
+            <section>
+              <label
+                htmlFor="requirements"
+                className="block mt-5 text-gray-900 dark:text-white"
               >
-                <option value="">Requirement Name</option>
-                <option value="node">node</option>
-                <option value="python">python</option>
-                <option value="python3">pyhton3</option>
-              </select>
-            </label>
+                Requirement Name
+                <select
+                  name="requirements"
+                  id="requirements"
+                  aria-label="Requirement Name"
+                  className="mt-1 bg-gray-50 border border-gray-300 text-gray-900  rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="node">node</option>
+                  <option value="python"> python</option>
+                  <option value="python3">pyhton3</option>
+                </select>
+                <select
+                  name="requirements"
+                  id="requirements"
+                  aria-label="Requirement Name"
+                  className="mt-1 bg-gray-50 border border-gray-300 text-gray-900  rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                </select>
+              </label>
+            </section>
           </section>
         </form>
       </section>
