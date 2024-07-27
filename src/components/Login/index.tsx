@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 interface LoginProps {
   onLogin: () => void;
@@ -7,22 +7,33 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [showMsg, setShowMsg] = useState(false);
-  const msg = "Womp Womp!";
+  const [msg, setMsg] = useState("Womp Womp!");
 
-  /**This function handles a click**/
-  const handleClick = () => {
-    setShowMsg(!showMsg);
-  };
-  /**This function handles the form submition and auth logic**/
-  const handleSubmit = (e: React.FormEvent) => {
+  /**This function handles the form submission and auth logic**/
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const username = (e.target as HTMLFormElement).username.value;
     const password = (e.target as HTMLFormElement).password.value;
-    localStorage.setItem("username", username);
-    if (password === "admin") {
-      onLogin();
-    } else {
-      setShowMsg(!showMsg);
+
+    try {
+      const response = await axios.post("http://localhost:6789/verifyUser", {
+        params: {
+          username,
+          password,
+        },
+      });
+
+      if (response.data.status) {
+        localStorage.setItem("username", username);
+        onLogin();
+      } else {
+        setShowMsg(true);
+        setMsg("Invalid username or password");
+      }
+    } catch (error) {
+      console.error("Error verifying user:", error);
+      setShowMsg(true);
+      setMsg("Error verifying user. Please try again.");
     }
   };
 
@@ -54,7 +65,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         <button className="bg-black text-white p-2 m-2 w-full" type="submit">
           Login
         </button>
-        <p className="text-gray-500" onClick={handleClick}>
+        <p className="text-gray-500" onClick={() => setShowMsg(!showMsg)}>
           Forget Password?
         </p>
         {showMsg && <p className="text-red-500 text-sm">{msg}</p>}
