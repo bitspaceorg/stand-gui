@@ -9,9 +9,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [showMsg, setShowMsg] = useState(false);
   const msg = "Womp Womp!";
 
+  /**This function handles a click**/
   const handleClick = () => {
     setShowMsg(!showMsg);
   };
+  /**This function handles the form submition and auth logic**/
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const username = (e.target as HTMLFormElement).username.value;
@@ -19,6 +21,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     localStorage.setItem("username", username);
     if (password === "admin") {
       onLogin();
+    } else {
+      setShowMsg(!showMsg);
     }
   };
 
