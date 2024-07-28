@@ -106,7 +106,6 @@ export default function Developer() {
           "Content-Type": "application/json",
         },
       });
-
       if (response.status !== 200) {
         throw new Error(`Error: ${response.statusText}`);
       }
