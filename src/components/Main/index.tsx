@@ -64,6 +64,11 @@ export default function Home() {
 					</section>
 				</section>
 				<Link
+					className="bg-black text-white p-3 rounded font-helvetica font-medium hover:text-gray-50 mt-5"
+					href="https://github.com/apps/standapps"
+				> install the app
+				</Link>
+				<Link
 					className=" bg-black text-white p-3  rounded font-helvetica font-medium hover:text-gray-50 mt-5"
 					href="/config"
 				>
