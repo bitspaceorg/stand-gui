@@ -82,7 +82,7 @@ export default function Developer() {
 				name: selectedRepo,
 				home: projectHome,
 				log: projectLog,
-				repoLink: repos[selectedRepoId + 1],
+				link: repos[selectedRepoId + 1],
 			},
 			requirements: {
 				language: requirementLanguage,
