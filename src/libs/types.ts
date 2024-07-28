@@ -15,3 +15,17 @@ export interface Metrics {
   maxProcs: number;
   network: any;
 }
+
+export interface Step {
+  name: string;
+  command: string;
+}
+
+export interface Env {
+  name: string;
+  value: string;
+}
+
+export interface RepoResponse {
+  repos: string[];
+}
